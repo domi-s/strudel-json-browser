@@ -19,13 +19,16 @@
         <VinylGraphic />
         <StrudelJsonBrowserGraphic />
     </SectionContent>
+    <SectionContent class="text-center">
+        <p class="text-xs opacity-50 font-medium">App & Design by <a href="https://github.com/domi-s" target="_blank" class="underline decoration-dashed">Dominic Satnoianu</a></p>
+    </SectionContent>
 </Section>
 <Section>
     <SectionContent class="flex flex-col items-center justify-center">
         <EnterYourJsonUrlGraphic />
     </SectionContent>
     <SectionContent class="flex flex-col items-center justify-center relative -top-12 w-full">
-        <input type="text" class={borderStyle + " w-full max-w-sm p-2"} placeholder="Type here&hellip;" bind:value={jsonUrl} />
+        <input type="text" class={borderStyle + " w-full max-w-sm p-2"} style="border-style: dashed;" placeholder="Type here&hellip;" bind:value={jsonUrl} />
         <div class="relative">
             <p class="opacity-0 pointer-events-none select-none">For instance, https://samples.grbt.com.au/strudel.json</p>
             {#if jsonUrl.trim() == ""}
