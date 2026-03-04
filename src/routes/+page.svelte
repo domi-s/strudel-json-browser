@@ -18,6 +18,8 @@
     let errorInformation: string | null = null;
     let jsonUrl = "";
     let audio: HTMLAudioElement | null = null;
+    let audioCurrentTime = 0;
+    let audioDuration = 0;
 
     async function loadJson() {
         if(loading) return;
@@ -64,6 +66,12 @@
         const url = results['_base'] + postUrl.trim();
 
         audio = new Audio(url);
+        audio.addEventListener('timeupdate', () => {
+            audioCurrentTime = audio!.currentTime;
+        });
+        audio.addEventListener('loadedmetadata', () => {
+            audioDuration = audio!.duration;
+        });
         audio.play();
         console.log(audio);
     }
@@ -73,6 +81,8 @@
             audio.pause();
             audio.currentTime = 0;
             audio = null;
+            audioCurrentTime = 0;
+            audioDuration = 0;
         }
     }
 </script>
@@ -136,10 +146,14 @@
                                     <span class="text-xs opacity-75">{key}:{index}</span>
                                     <p>{item}</p>
                                     <div class="mt-2 flex flex-wrap gap-x-2 gap-y-1 items-center">
-                                        {#if audio && audio.src.endsWith(item.trim()) && !audio.paused && !audio.ended}
+                                        {#if audio && audio.src.endsWith(item.trim())}
                                             <button class="text-xs font-bold hover:underline decoration-dashed cursor-pointer" on:click={stopAudio}>Stop</button>
                                             <p class="text-xs opacity-50">
-                                                {audio.currentTime.toFixed(1)}s / {audio.duration ? audio.duration.toFixed(1) : '??'}s
+                                                {#if audioCurrentTime}
+                                                    {audioCurrentTime.toFixed(1)}s / {audioDuration ? audioDuration.toFixed(1) : '??'}s
+                                                {:else}
+                                                    Loading&hellip;
+                                                {/if}
                                             </p>
                                         {:else}
                                             <button class="text-xs font-bold hover:underline decoration-dashed cursor-pointer" on:click={() => playAudio(item)}>Play</button>
