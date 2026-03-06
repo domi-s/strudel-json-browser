@@ -48,6 +48,8 @@
     }
 
     function playAudio(postUrl: string) {
+        if(audio) stopAudio();
+
         if(!results) {
             errorInformation = "No JSON loaded. Please load a JSON file first.";
             return;
@@ -139,12 +141,14 @@
             {#each Object.entries(results) as [key, value]}
                 {#if Array.isArray(value)}
                     <div class="w-full">
-                        <h3 class="font-black sticky top-0 bg-white py-4 z-50">Category: {key}</h3>
+                        <div class="sticky top-2 bg-white p-1 z-50 text-center border-2 border-solid border-black">
+                            <h3 class="font-black wrap-break-word bg-white p-1">Category: {key}</h3>
+                        </div>
                         <div class="flex flex-col gap-y-2 mt-1 mb-4 w-full">
                             {#each value as item, index}
-                                <div class="border-2 border-solid border-black p-2 w-full flex flex-col leading-tight">
-                                    <span class="text-xs opacity-75">{key}:{index}</span>
-                                    <p>{item}</p>
+                                <div class={borderStyle + " p-2 w-full flex flex-col leading-tight"}>
+                                    <span class="text-xs opacity-75 wrap-break-word">{key}:{index}</span>
+                                    <p class="[direction:rtl] overflow-ellipsis whitespace-nowrap overflow-hidden text-left">{item}</p>
                                     <div class="mt-2 flex flex-wrap gap-x-2 gap-y-1 items-center">
                                         {#if audio && audio.src.endsWith(item.trim())}
                                             <button class="text-xs font-bold hover:underline decoration-dashed cursor-pointer" on:click={stopAudio}>Stop</button>
